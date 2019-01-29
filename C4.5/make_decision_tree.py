@@ -11,15 +11,32 @@ def createDataSet():
     '''
     :return: 自定义的数据集以及标签
     :function: 生成自定义的数据集以及标签用于训练
+    age -> youth : 0
+    age -> middle : 1
+    age -> senior : 2
+    income -> low : 0
+    income -> medium : 1
+    income -> high : 2
+    student -> yes : 1
+    student -> no : 0
+    credit_rating -> fair : 0
+    credit_rating -> excellent : 1
     '''
-    dataSet = [[0, 0, 0, 0, 'N'],
-               [0, 0, 0, 1, 'N'],
-               [1, 0, 0, 0, 'Y'],
+    dataSet = [[0, 2, 0, 0, 'N'],
+               [0, 2, 0, 1, 'N'],
+               [1, 2, 0, 0, 'Y'],
                [2, 1, 0, 0, 'Y'],
-               [2, 2, 1, 0, 'Y'],
-               [2, 2, 1, 1, 'N'],
-               [1, 2, 1, 1, 'Y']]
-    labels = ['outlook', 'temperature', 'humidity', 'windy']
+               [2, 0, 1, 0, 'Y'],
+               [2, 0, 1, 1, 'N'],
+               [1, 0, 1, 1, 'Y'],
+               [0, 1, 0, 0, 'N'],
+               [0, 0, 1, 0, 'Y'],
+               [2, 1, 1, 0, 'Y'],
+               [0, 1, 1, 1, 'Y'],
+               [1, 1, 0, 1, 'Y'],
+               [1, 2, 1, 0, 'Y'],
+               [2, 1, 0, 1, 'N']]
+    labels = ['age', 'income', 'student', 'credit_rating']
     return dataSet, labels
 
 def createTestSet():
