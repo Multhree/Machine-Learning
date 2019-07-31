@@ -1,10 +1,5 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# @Time    : 2019/7/31 下午 03:01
-# @Author  : YuXin Chen
-
-#!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 # @Time    : 2019/7/31 下午 01:42
 # @Author  : YuXin Chen
 
@@ -72,7 +67,8 @@ class kMeans(object):
                 break
             for i in range(self.n_clusters):  # 将每个簇中的点的均值作为质心
                 ptsInClust = X[np.nonzero(self.clusterAssment[:, 0] == i)[0]]  # 取出属于第i个族的所有点
-                self.centroids[i, :] = np.mean(ptsInClust, axis=0)
+                if(len(ptsInClust) != 0):
+                    self.centroids[i, :] = np.mean(ptsInClust, axis=0)
 
         self.labels = self.clusterAssment[:, 0]
         self.sse = sum(self.clusterAssment[:, 1])   # Sum of Squared Error,SSE
@@ -93,7 +89,8 @@ class biKMeans(object):
     def fit(self, X):
         m = X.shape[0]
         self.clusterAssment = np.zeros((m, 2))
-        centroid0 = np.mean(X, axis=0).tolist()
+        if(len(X) != 0):
+            centroid0 = np.mean(X, axis=0).tolist()
         centList = [centroid0]
         for j in range(m):  # 计算每个样本点与质心之间初始的SE
             self.clusterAssment[j, 1] = self.distEclud(np.asarray(centroid0), X[j, :]) ** 2
