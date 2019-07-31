@@ -55,7 +55,7 @@ class kMeans(object):
             for i in range(m):  # 将每个样本分配到离它最近的质心所属的簇
                 minDist = np.inf
                 minIndex = -1
-                for j in range(self.n_clusters):
+                for j in range(self.n_clusters):    #遍历所有数据点找到距离每个点最近的质心
                     distJI = self.distEclud(self.centroids[j, :], X[i, :])
                     if distJI < minDist:
                         minDist = distJI
@@ -83,6 +83,7 @@ class biKMeans(object):
     # 计算两点的欧式距离
     def distEclud(self, vecA, vecB):
         return np.linalg.norm(vecA - vecB)
+
     # 计算两点的曼哈顿距离
     def distManh(self, vecA, vecB):
         return np.linalg.norm(vecA - vecB,ord = 1)
@@ -119,38 +120,39 @@ class biKMeans(object):
         self.sse = sum(self.clusterAssment[:, 1])
         self.centroids = np.asarray(centList)
 
-def visualization(k, dataSet, y, cents, labels, sse, lowestsse):   # 画出聚类结果
+def visualization(k, dataSet, dataLabel, cents, labels, sse, lowestsse):   # 画出聚类结果
     # 每一类用一种颜色
     # colors = ['pink', 'blue', 'brown', 'cyan', 'darkgreen', 'darkorange', 'darkred', 'gray', 'navy', 'yellow']
     colors = ['#FFC0CB','#0000FF','#A52A2A','#00FFFF','#006400','#FF8C00','#8B0000','#808080','#000080','#FFFF00']
+    # colors = ['b', 'g', 'r', 'k', 'c', 'm', 'y', '#e24fff', '#524C90', '#845868']
     for i in range(k):
         index = np.nonzero(labels == i)[0]
         x0 = dataSet[index, 0]
         x1 = dataSet[index, 1]
-        y_i = y[index]
+        y_i = dataLabel[index]
         for j in range(len(x0)):
             plt.text(x0[j], x1[j], str(int(y_i[j])), color=colors[i], fontdict={'weight': 'bold', 'size': 9})
-        plt.scatter(cents[i, 0], cents[i, 1], marker='x', color='#000000', linewidths=12)
+        plt.scatter(cents[i, 0], cents[i, 1], marker='x', color=colors[i], linewidths=12)
     plt.title("SSE={:.2f}".format(sse))
     plt.axis([-30, 30, -30, 30])
     if(sse < lowestsse):
         plt.savefig("lowestsee.png")
-    plt.ion()
-    plt.pause(0.5)
-    plt.close()
+    # plt.ion()
+    # plt.pause(0.5)
+    # plt.close()
 
 def main():
-    dataSet, y = pickle.load(open('data.pkl', 'rb'), encoding='latin1')
-    # dataSet = list(dataSet)
-    k = 10
-    clf = biKMeans(k)
     lowestsse = np.inf
-    for i in range(10):
+    for _ in range(1):
+        print(_)
+        dataSet, dataLabel = pickle.load(open('data.pkl', 'rb'), encoding='latin1')
+        k = 10
+        clf = biKMeans(k)
         clf.fit(dataSet)
         cents = clf.centroids
         labels = clf.labels
         sse = clf.sse
-        visualization(k, dataSet, y, cents, labels, sse, lowestsse)
+        visualization(k, dataSet, dataLabel, cents, labels, sse, lowestsse)
         if(sse < lowestsse):
             lowestsse = sse
 if __name__ == '__main__':
